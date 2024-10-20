@@ -2,78 +2,117 @@ import { Tabs } from "expo-router";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
+import { View } from "react-native";
+import Header from "@/components/Header";
+import { StatusBar } from "react-native";
 
 export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: "black",
-        tabBarInactiveBackgroundColor: "white",
-        tabBarActiveBackgroundColor: "#F2D7A7",
-        headerShown: false,
-        tabBarStyle: {
-          height: 60,
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 999,
-        },
-        tabBarLabelStyle: { paddingBottom: 9 },
-      }}
-    >
-      <Tabs.Screen
-        name="(public)/index"
-        options={{
-          title: "Home",
+    <>
+      <StatusBar
+        backgroundColor="#a08145" // Altera a cor de fundo da StatusBar
+      />
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: "black",
+          tabBarInactiveBackgroundColor: "white",
+          headerShown: true,
+          tabBarShowLabel: false,
+          header: () => <Header />,
+          tabBarStyle: {
+            height: 65,
+            alignItems: "center",
+            justifyContent: "center",
+          },
+          tabBarLabelStyle: { paddingBottom: 7 },
+        }}
+      >
+        <Tabs.Screen
+          name="(public)/index"
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                {focused && (
+                  <View
+                    style={{
+                      backgroundColor: "#F2D7A7",
+                      borderRadius: 999,
+                      width: 45,
+                      height: 45,
+                      position: "absolute",
+                    }}
+                  />
+                )}
+                <AntDesign name="home" size={24} color={color} />
+              </View>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="(public)/offers"
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                {focused && (
+                  <View
+                    style={{
+                      backgroundColor: "#F2D7A7",
+                      borderRadius: 999,
+                      width: 45,
+                      height: 45,
+                      position: "absolute",
+                    }}
+                  />
+                )}
+                <Feather name="percent" size={24} color={color} />
+              </View>
+            ),
+          }}
+        />
 
-          tabBarIcon: ({ color, focused }) => (
-            <AntDesign
-              name={focused ? "home" : "home"}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="(public)/offers"
-        options={{
-          title: "Ofertas",
-          tabBarIcon: ({ color, focused }) => (
-            <Feather
-              name={focused ? "percent" : "percent"}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="(auth)"
-        options={{
-          title: "Carrinho",
-          tabBarIcon: ({ color, focused }) => (
-            <Feather
-              name={focused ? "shopping-cart" : "shopping-cart"}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="account/login"
-        options={{
-          title: "Conta",
-          tabBarIcon: ({ color, focused }) => (
-            <AntDesign
-              name={focused ? "user" : "user"}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-    </Tabs>
+        <Tabs.Screen
+          name="(auth)"
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                {focused && (
+                  <View
+                    style={{
+                      backgroundColor: "#F2D7A7",
+                      borderRadius: 999,
+                      width: 45,
+                      height: 45,
+                      position: "absolute",
+                    }}
+                  />
+                )}
+                <Feather name="shopping-cart" size={24} color={color} />
+              </View>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="account/login"
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                {focused && (
+                  <View
+                    style={{
+                      backgroundColor: "#F2D7A7",
+                      borderRadius: 999,
+                      width: 45,
+                      height: 45,
+                      position: "absolute",
+                    }}
+                  />
+                )}
+                <AntDesign name="user" size={24} color={color} />
+              </View>
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 }

@@ -27,6 +27,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
     InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+    Koho: require("../assets/fonts/KoHo-Bold.ttf"),
   });
 
   useEffect(() => {
