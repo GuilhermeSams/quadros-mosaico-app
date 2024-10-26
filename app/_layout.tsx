@@ -13,10 +13,9 @@ import "react-native-reanimated";
 import { TamaguiProvider } from "@tamagui/core";
 import config from "../tamagui.config"; // sua configuração
 import { ClerkProvider } from "@clerk/clerk-expo";
-import { ActivityIndicator } from "react-native";
-
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { tokenCache } from "./(tabs)/account/_storege/tokenCache";
+import { StatusBar } from "expo-status-bar";
 
 // Impede que a splash screen esconda automaticamente antes do carregamento completo.
 SplashScreen.preventAutoHideAsync();
@@ -50,6 +49,7 @@ export default function RootLayout() {
           value={colorScheme === "light" ? DarkTheme : DefaultTheme}
         >
           <Slot />
+          <StatusBar backgroundColor="#a08145" />
         </ThemeProvider>
       </TamaguiProvider>
     </ClerkProvider>

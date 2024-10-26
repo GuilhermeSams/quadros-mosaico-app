@@ -9,9 +9,7 @@ import { StatusBar } from "react-native";
 export default function TabLayout() {
   return (
     <>
-      <StatusBar
-        backgroundColor="#a08145" // Altera a cor de fundo da StatusBar
-      />
+      <StatusBar backgroundColor="#a08145" />
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: "black",
