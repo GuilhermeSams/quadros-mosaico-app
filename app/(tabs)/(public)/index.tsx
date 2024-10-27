@@ -1,4 +1,11 @@
-import { Dimensions, StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -7,6 +14,10 @@ import { items } from "./_data/itensCorousel";
 import CarouselItem from "../../../components/Carousel/CarouselItem";
 import { useRef, useEffect } from "react";
 import PaginationCarousel from "@/components/Carousel/PaginationCarousel";
+import CardMosaic from "@/components/CardMosaic_1/CardMosaic";
+import Frame_1 from "@/components/CardMosaic_1/FrameMosaics/Frame-1";
+import Frame_2 from "@/components/CardMosaic_1/FrameMosaics/Frame-2";
+import { DataCardMosaic } from "../../../components/CardMosaic_1/DataCardMosaic";
 
 const { width } = Dimensions.get("window");
 
@@ -39,32 +50,50 @@ export default function HomeScreen() {
 
   return (
     <>
-      <View className="my-2 mx-4">
-        <Text className="text-black text-2xl leading-6 font-[Koho] w-72">
-          Personalize seu quadro com imagens
-        </Text>
-      </View>
-
-      <View className="bg-[#f2f2f2]">
-        <Animated.FlatList
-          ref={flatListRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          onScroll={onScrollHandler}
-          data={items}
-          keyExtractor={(item) => item.id}
-          pagingEnabled={true}
-          renderItem={({ item, index }) => {
-            return <CarouselItem item={item} index={index} scrollX={scrollX} />;
-          }}
-        />
-
-        <View style={styles.paginationContainer}>
-          {items.map((_, index) => (
-            <PaginationCarousel key={index} index={index} scrollX={scrollX} />
-          ))}
+      <ScrollView>
+        <View className="my-2 mx-4">
+          <Text className="text-black text-2xl leading-6 font-[Koho] w-72">
+            Personalize seu quadro com imagens
+          </Text>
         </View>
-      </View>
+        <View className="bg-[#f2f2f2]">
+          <Animated.FlatList
+            ref={flatListRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            onScroll={onScrollHandler}
+            data={items}
+            keyExtractor={(item) => item.id}
+            pagingEnabled={true}
+            renderItem={({ item, index }) => {
+              return (
+                <CarouselItem item={item} index={index} scrollX={scrollX} />
+              );
+            }}
+          />
+          <View style={styles.paginationContainer}>
+            {items.map((_, index) => (
+              <PaginationCarousel key={index} index={index} scrollX={scrollX} />
+            ))}
+          </View>
+        </View>
+        <View className=" flex-row mt-4 justify-center flex-wrap">
+          {DataCardMosaic.map((card, index) => {
+            const Component = card.component;
+            return (
+              <CardMosaic
+                key={index}
+                ratingStars={card.ratingStars}
+                description={card.description}
+                price={card.price}
+                cents={card.cents}
+              >
+                {Component ? <Component /> : null}
+              </CardMosaic>
+            );
+          })}
+        </View>
+      </ScrollView>
     </>
   );
 }
