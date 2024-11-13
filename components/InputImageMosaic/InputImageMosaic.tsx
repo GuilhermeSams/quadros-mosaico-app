@@ -1,33 +1,45 @@
-import React, { useState } from "react";
-import { View, Button, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Alert, Dimensions, FlatList } from "react-native";
+import { Button } from "tamagui";
+import { View } from "tamagui";
 import { Svg, Image as SvgImage } from "react-native-svg";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 
-const MosaicFrame = () => {
+interface MosaicFrameProps {
+  onImageSelected: () => void;
+  refreshing: boolean;
+}
+
+const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [imageParts, setImageParts] = useState<string[]>([]);
+  const heights = [420, 460, 500, 460, 420]; // Alturas desejadas
+
+  const screenWidth = Dimensions.get("window").width;
+  const svgWidth = screenWidth * 0.6;
+  const partWidth = svgWidth / 5;
+  const spacing = partWidth * 0.1; // 10% do tamanho da parte
+
+  useEffect(() => {
+    if (refreshing) {
+      setImageUri(null);
+      setImageParts([]);
+    }
+  }, [refreshing]);
 
   const pickImage = async () => {
     try {
-      console.log("Abrindo o seletor de imagens...");
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
 
-      console.log("Imagem selecionada:", result);
       if (!result.canceled) {
         const uri = result.assets[0].uri;
         const originalWidth = result.assets[0].width;
         const originalHeight = result.assets[0].height;
 
-        console.log(`URI da imagem: ${uri}`);
-        console.log(
-          `Dimensões da imagem: Largura=${originalWidth}, Altura=${originalHeight}`
-        );
-
-        // Verifica se a largura e altura são iguais
         if (originalWidth !== originalHeight) {
           Alert.alert(
             "Dimensões inválidas",
@@ -36,17 +48,15 @@ const MosaicFrame = () => {
           return;
         }
 
-        // Redimensiona a imagem para 800px de largura (mantendo a proporção)
         const resizedImage = await ImageManipulator.manipulateAsync(
           uri,
           [{ resize: { width: 800 } }],
-          { compress: 0.7, format: ImageManipulator.SaveFormat.PNG }
+          { compress: 0.5, format: ImageManipulator.SaveFormat.PNG }
         );
 
-        console.log("Imagem redimensionada:", resizedImage);
-
-        setImageUri(resizedImage.uri); // Define a URI da imagem redimensionada
-        splitImage(resizedImage.uri); // Chama a função para manipular a imagem
+        setImageUri(resizedImage.uri);
+        splitImage(resizedImage.uri, 800, 800);
+        onImageSelected(); // Chama a função quando a imagem é válida
       }
     } catch (error) {
       Alert.alert("Erro", "Ocorreu um erro ao selecionar a imagem.");
@@ -54,26 +64,26 @@ const MosaicFrame = () => {
     }
   };
 
-  const splitImage = async (uri: string) => {
+  const splitImage = async (uri: string, width: number, height: number) => {
     try {
       if (!uri) {
         throw new Error("A URI da imagem não foi definida.");
       }
 
       const imagePartsTemp: string[] = [];
-      const width = 800;
-      const height = 800;
+      const numParts = 5;
+      const partWidth = width / numParts;
 
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < numParts; i++) {
         const cropResult = await ImageManipulator.manipulateAsync(
           uri,
           [
             {
               crop: {
-                originX: (width / 5) * i,
-                originY: 0,
-                width: width / 5,
-                height: height,
+                originX: partWidth * i,
+                originY: (height - heights[i]) / 2, // Centraliza o corte verticalmente
+                width: partWidth,
+                height: heights[i],
               },
             },
           ],
@@ -90,26 +100,49 @@ const MosaicFrame = () => {
   };
 
   return (
-    <>
-      <Button title="Selecione uma Imagem" onPress={pickImage} />
-
-      <View className="items-center, justify-center, m-auto">
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ position: 'absolute', bottom: 350, zIndex: 1 }}>
+        <Button
+          bg={'#B9985C'}
+          color={'#fff'}
+          borderWidth={1}
+          borderColor={'#86692F'}
+          borderRadius={999}
+          onPress={pickImage}
+        >
+          Selecionar imagem
+        </Button>
+      </View>
+      <View style={{ position: 'absolute', bottom: 310, zIndex: 1 }}>
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
         {imageUri && (
-          <Svg height="400" width="800">
-            {imageParts.map((partUri, index) => (
-              <SvgImage
-                key={index}
-                x={index * 80} // Espaçamento horizontal entre os painéis
-                y={0}
-                width="80"
-                height="380"
-                href={{ uri: partUri }}
-              />
-            ))}
-          </Svg>
+          <FlatList
+            data={imageParts}
+            horizontal
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <Svg
+                height={heights[index]}
+                width={partWidth}
+                style={{
+                  marginHorizontal: spacing / 5,
+                  alignSelf: "center",
+                }}
+              >
+                <SvgImage
+                  x={0}
+                  y={0}
+                  width={partWidth}
+                  height={heights[index]}
+                  href={{ uri: item }}
+                />
+              </Svg>
+            )}
+          />
         )}
       </View>
-    </>
+      </View>
+    </View>
   );
 };
 

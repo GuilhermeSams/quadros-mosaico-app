@@ -110,6 +110,13 @@ export default function TabLayout() {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="(public)/customizeFrame/index"
+          options={{
+            tabBarButton: () => null,
+          }}
+        />
       </Tabs>
     </>
   );
