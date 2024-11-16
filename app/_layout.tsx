@@ -46,7 +46,7 @@ export default function RootLayout() {
     >
       <TamaguiProvider config={config}>
         <ThemeProvider
-          value={colorScheme === "light" ? DarkTheme : DefaultTheme}
+          value={DefaultTheme}
         >
           <Slot />
           <StatusBar backgroundColor="#a08145" />

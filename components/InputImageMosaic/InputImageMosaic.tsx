@@ -100,21 +100,10 @@ const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View style={{ position: 'absolute', bottom: 350, zIndex: 1 }}>
-        <Button
-          bg={'#B9985C'}
-          color={'#fff'}
-          borderWidth={1}
-          borderColor={'#86692F'}
-          borderRadius={999}
-          onPress={pickImage}
-        >
-          Selecionar imagem
-        </Button>
-      </View>
-      <View style={{ position: 'absolute', bottom: 310, zIndex: 1 }}>
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
+    <>
+     <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <View>
+      <View style={{ alignItems: "center", position: 'absolute', bottom: -10, right: "-32.5%", justifyContent: "center"}}>
         {imageUri && (
           <FlatList
             data={imageParts}
@@ -143,6 +132,21 @@ const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }
       </View>
       </View>
     </View>
+      <View mt={15}>
+          <Button
+            bg={'#B9985C'}
+            color={'#fff'}
+            borderWidth={1}
+            borderColor={'#86692F'}
+            borderRadius={999}
+            onPress={pickImage}
+          >
+            Selecionar imagem
+          </Button>
+        </View>
+
+    </>
+   
   );
 };
 

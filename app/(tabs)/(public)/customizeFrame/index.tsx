@@ -21,7 +21,7 @@ export default function ScreenCustomFrame() {
 
   return (
     <ScrollView
-      contentContainerStyle={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -30,14 +30,17 @@ export default function ScreenCustomFrame() {
         <Text>120 Vendidos</Text>
         <Text>5 Mosaicos semétrico tamanho normal</Text>
       </View>
-      <Image
-        source={
-          isImageSelected
-            ? require('../../../../assets/images/sala.png')
-            : require('../../../../assets/images/sala_mosaico_01.png')
-        }
-      />
-      <MosaicFrame onImageSelected={handleImageSelected} refreshing={refreshing} />
+      <View style={{flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Image
+        style={{}}
+          source={
+            isImageSelected
+              ? require('../../../../assets/images/sala.png')
+              : require('../../../../assets/images/sala_mosaico_01.png')
+          }
+        />
+        <MosaicFrame onImageSelected={handleImageSelected} refreshing={refreshing} />
+      </View>
     </ScrollView>
   );
 }
