@@ -25,7 +25,6 @@ export default function HomeScreen() {
   const scrollX = useSharedValue(0);
   const flatListRef = useRef<FlatList>(null);
   const intervalTime = 3000;
-
   const onScrollHandler = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x;
   });
@@ -87,6 +86,7 @@ export default function HomeScreen() {
                 description={card.description}
                 price={card.price}
                 cents={card.cents}
+                mosaicType={card.mosaicType}
               >
                 {Component ? <Component /> : null}
               </CardMosaic>

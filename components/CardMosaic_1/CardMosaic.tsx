@@ -2,7 +2,7 @@ import { View, Text, XStack } from "tamagui";
 import { StarRatingDisplay } from "react-native-star-rating-widget";
 import { ReactNode } from "react";
 import { TouchableOpacity } from "react-native";
-import { router, Router } from "expo-router";
+import { useRouter } from "expo-router";
 
 type CardMosaicVariantProps = {
   children: ReactNode; // Tipagem como ReactNode para maior flexibilidade
@@ -10,6 +10,7 @@ type CardMosaicVariantProps = {
   description: string;
   price: number;
   cents: number;
+  mosaicType: string;
 };
 
 const CardMosaic = ({
@@ -18,10 +19,13 @@ const CardMosaic = ({
   description,
   price,
   cents,
+  mosaicType,
 }: CardMosaicVariantProps) => {
+  const router = useRouter();
+
   return (
     <TouchableOpacity
-      onPress={() => router.push("/(tabs)/(public)/customizeFrame")}
+      onPress={() => router.push({ pathname: "/(tabs)/(public)/customizeFrame", params: { mosaicType } })}
       activeOpacity={0.6}
     >
       <View
