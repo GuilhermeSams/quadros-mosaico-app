@@ -14,12 +14,12 @@ interface MosaicFrameProps {
 const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [imageParts, setImageParts] = useState<string[]>([]);
-  const heights = [420, 460, 500, 460, 420]; // Alturas desejadas
+  const heights = [450, 450, 450]; // Alturas desejadas
 
   const screenWidth = Dimensions.get("window").width;
   const svgWidth = screenWidth * 0.6;
-  const partWidth = svgWidth / 5;
-  const spacing = partWidth * 0.1; // 10% do tamanho da parte
+  const partWidth = svgWidth / 3;
+  const spacing = partWidth * 0.1; // Aumentar para 20% do tamanho da parte
 
   useEffect(() => {
     if (refreshing) {
@@ -50,12 +50,12 @@ const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }
 
         const resizedImage = await ImageManipulator.manipulateAsync(
           uri,
-          [{ resize: { width: 800 } }],
+          [{ resize: { width: 900 } }],
           { compress: 0.5, format: ImageManipulator.SaveFormat.PNG }
         );
 
         setImageUri(resizedImage.uri);
-        splitImage(resizedImage.uri, 800, 800);
+        splitImage(resizedImage.uri, 900, 900);
         onImageSelected(); // Chama a função quando a imagem é válida
       }
     } catch (error) {
@@ -71,7 +71,7 @@ const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }
       }
 
       const imagePartsTemp: string[] = [];
-      const numParts = 5;
+      const numParts = 3;
       const partWidth = width / numParts;
 
       for (let i = 0; i < numParts; i++) {
@@ -120,7 +120,7 @@ const MosaicFrame: React.FC<MosaicFrameProps> = ({ onImageSelected, refreshing }
               >
                 <SvgImage
                   x={0}
-                  y={0}
+                  y={80}
                   width={partWidth}
                   height={heights[index]}
                   href={{ uri: item }}
